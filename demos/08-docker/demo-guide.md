@@ -103,17 +103,26 @@ docker build -t stock-app:demo .
 > did not change."
 
 Now run the app container, connecting it to the MySQL container.
-We use `host.docker.internal` so the app container can reach the MySQL container via the host:
+We use `host.docker.internal` so the app container can reach the MySQL container via the host.
+On Linux, this hostname does not resolve automatically — `--add-host` is required
+(Docker 20.10+):
 
 ```bash
 docker run -d \
   -p 8080:8080 \
   --name stock-app \
+  --add-host=host.docker.internal:host-gateway \
   -e SPRING_DATASOURCE_URL="jdbc:mysql://host.docker.internal:3306/stocksdb?useSSL=false&allowPublicKeyRetrieval=true" \
   -e SPRING_DATASOURCE_USERNAME=appuser \
   -e SPRING_DATASOURCE_PASSWORD=apppass \
   stock-app:demo
 ```
+
+> **Demoing on Windows or Mac (Docker Desktop) instead of the Linux VM?** Docker Desktop
+> resolves `host.docker.internal` natively, so the `--add-host` flag above is unnecessary
+> there (it's harmless to leave in, but you can drop it). You can also use `localhost:8080`
+> directly rather than the VM's private IP and the 8081 workaround the delegates use for
+> their Linux VMs — Docker Desktop doesn't have the Jenkins port clash that the lab VMs do.
 
 Check logs and test:
 
@@ -143,5 +152,4 @@ app itself all run from images. Any machine with Docker reproduces this environm
 
 ## Instructor notes
 
-- On Linux, use `--network host` or a Docker network instead of `host.docker.internal`
 - If port 3306 is already in use on the host, change the -p mapping: `-p 3307:3306`

@@ -1,0 +1,103 @@
+name: CD
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    # TODO 1: Add permissions to allow pushing packages to GHCR
+    permissions:
+      contents: read
+      packages: ???
+
+    outputs:
+      image: ${{ steps.image-name.outputs.image }}
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build with Maven
+        run: mvn -B package -DskipTests
+
+      # TODO 2: Add a step to run the tests
+      - name: Run tests
+        run: ???
+
+      - name: Derive lowercase image name
+        id: image-name
+        run: |
+          IMAGE="ghcr.io/$(echo '${{ github.repository }}' | tr '[:upper:]' '[:lower:]'):${{ github.sha }}"
+          echo "image=$IMAGE" >> "$GITHUB_OUTPUT"
+
+      # TODO 3: Log in to GHCR using docker/login-action@v3
+      #         registry: ghcr.io
+      #         username: ${{ github.actor }}
+      #         password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to GitHub Container Registry
+        uses: ???
+        with:
+          registry: ???
+          username: ???
+          password: ???
+
+      # TODO 4: Build and push the image using docker/build-push-action@v5
+      #         context: .   push: true
+      #         tags: ${{ steps.image-name.outputs.image }}
+      - name: Build and push Docker image
+        uses: ???
+        with:
+          context: .
+          push: ???
+          tags: |
+            ???
+            ghcr.io/${{ github.repository_owner }}/stock-app:latest
+
+  deploy:
+    # TODO 5: Make this job depend on build-and-push succeeding
+    needs: ???
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      # TODO 6: Copy docker-compose.yml to ~/stock-app/ on the server
+      #         Use appleboy/scp-action@v0.1.7
+      #         host, username, key come from secrets
+      - name: Copy docker-compose.yml to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.??? }}
+          username: ${{ secrets.??? }}
+          key: ${{ secrets.??? }}
+          source: docker-compose.yml
+          target: ~/stock-app/
+
+      # TODO 7: SSH to the server and run:
+      #           cd ~/stock-app
+      #           echo "STOCK_APP_IMAGE=<image>" > .env
+      #           docker compose pull
+      #           docker compose up -d
+      #           docker compose ps
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd ~/stock-app
+            echo "STOCK_APP_IMAGE=${{ needs.build-and-push.outputs.image }}" > .env
+            docker compose ???
+            docker compose ???
+            docker compose ps

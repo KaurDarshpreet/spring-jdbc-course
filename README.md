@@ -55,10 +55,13 @@ solutions/              Reference implementations for instructors
 | 01 | [Introduction to Spring](labs/01-introduction-to-spring/README.md) | IoC and DI with plain Spring |
 | 02 | [Introduction to SpringBoot](labs/02-introduction-to-springboot/README.md) | Convert to SpringBoot |
 | 03 | [Spring JDBC with SpringBoot](labs/03-spring-jdbc/README.md) | MySQL data access with JdbcTemplate |
-| 04 | [REST and Microservices](labs/04-rest-and-microservices/README.md) | REST API with Spring MVC |
-| 05 | [Controllers and Service Layers](labs/05-controllers-and-service-layers/README.md) | DTOs, validation, error handling |
-| 06 | [Best Practices](labs/06-best-practices/README.md) | Testing, clean code, configuration |
-| 07 | [GenAI in Spring Development](labs/07-genai-in-spring/README.md) | AI-assisted development workflow |
+| 04 | [REST and Microservices](labs/04-rest/README.md) | REST API with Spring MVC |
+| 05 | [Controllers and Service Layers](labs/05-dtos-validation-logging/README.md) | DTOs, validation, error handling |
+| 06 | [Best Practices](labs/06-testing/README.md) | Testing, clean code, configuration |
+| 07 | [GenAI in Spring Development](labs/07-generative-ai/README.md) | AI-assisted development workflow |
+| 08 | [Introduction to Docker](labs/08-docker/README.md) | Containerise the app and database with Docker |
+| 09 | [Continuous Integration with GitHub Actions](labs/09-ci-github-actions/README.md) | Automated build and test on every push |
+| 10 | [Continuous Delivery and Deployment](labs/10-cd-github-actions/README.md) | Build, push, and deploy a Docker image via GitHub Actions |
 
 ## Running a Project
 

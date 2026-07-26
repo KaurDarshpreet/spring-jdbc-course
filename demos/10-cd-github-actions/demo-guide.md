@@ -147,7 +147,9 @@ Add three secrets:
 
 Push the workflow file. Show the Actions tab - both jobs run in sequence.
 
-After the deploy job completes, open `http://DEPLOY_HOST:8080` — the app and frontend are live.
+After the deploy job completes, open `http://DEPLOY_HOST:8081` — the app and frontend are live
+(port 8081, not 8080, since Jenkins already occupies 8080 on the Linux VM — same reason the
+Module 08 lab uses 8081).
 
 **Key message:** From a git push to a live deployment with no manual steps. That is CD.
 

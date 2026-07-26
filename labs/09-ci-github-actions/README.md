@@ -5,14 +5,14 @@ Add a GitHub Actions CI workflow to the Stock Tracker Spring Boot application so
 push and pull request automatically builds the project and runs the tests.
 
 ## Prerequisites
-- A GitHub account
+- Module 08 lab completed — you should already have your own `stock-tracker` GitHub
+  repository, containing the stocks REST API and a working `Dockerfile`
 - Git installed locally
-- The Module 06 solution (or your own completed stocks application) available locally
 - Docker not required for this lab — the tests use Mockito and do not need a database
 
 ## Overview
 You will:
-1. Push the stocks application to your own GitHub repository
+1. Continue working in the `stock-tracker` repository you created in Module 08
 2. Create a `.github/workflows/ci.yml` workflow file
 3. Push the workflow and watch GitHub Actions run it
 4. Introduce a deliberate test failure and observe the CI failure
@@ -22,27 +22,24 @@ You will:
 
 ## Steps
 
-### Step 1 — Create a GitHub repository
-1. Log in to GitHub and create a new repository called `stock-tracker`
-2. Leave it empty (do not add README or .gitignore via the UI)
+### Step 1 — Continue in your repository
+This lab reuses the `stock-tracker` repository you created and pushed to in Module 08 — no
+new repository is needed.
 
-### Step 2 — Push the application to GitHub
-From the Module 06 solution directory (or your own completed stocks app):
+Docker isn't required for this lab, so if you'd rather work from your Windows VM than the
+Linux VM, clone (or pull) your repository there:
 
 ```bash
-git init
-git add .
-git commit -m "Initial commit - stocks REST API"
-git branch -M main
-git remote add origin https://github.com/YOUR-USERNAME/stock-tracker.git
-git push -u origin main
+git clone https://github.com/YOUR-USERNAME/stock-tracker.git
+cd stock-tracker
 ```
 
-Open the repository on GitHub and confirm the source code is there.
+If you're continuing on the same machine you used for Module 08, just `cd` into your existing
+clone — there's nothing new to set up.
 
 ---
 
-### Step 3 — Create the workflow file
+### Step 2 — Create the workflow file
 In your project, create the file `.github/workflows/ci.yml`.
 
 Complete each TODO:
@@ -87,7 +84,7 @@ jobs:
 
 ---
 
-### Step 4 — Push the workflow and watch it run
+### Step 3 — Push the workflow and watch it run
 ```bash
 git add .github/workflows/ci.yml
 git commit -m "Add CI workflow"
@@ -102,7 +99,7 @@ The run should complete with a green tick.
 
 ---
 
-### Step 5 — Introduce a deliberate failure
+### Step 4 — Introduce a deliberate failure
 Open `src/main/java/com/stocks/service/StockServiceImpl.java`.
 
 Find the `addStock` method and change the duplicate-check condition so it always throws:
@@ -125,7 +122,7 @@ test caught it and why.
 
 ---
 
-### Step 6 — Fix the failure and go green
+### Step 5 — Fix the failure and go green
 Revert your change to `StockServiceImpl`:
 
 ```bash
@@ -137,7 +134,7 @@ Watch the Actions tab — CI should go green again.
 
 ---
 
-### Step 7 — Add a build status badge (stretch)
+### Step 6 — Add a build status badge (stretch)
 GitHub generates a badge URL for your workflow. Find it at:
 
 **Actions tab > your workflow > top-right "..." menu > Create status badge**

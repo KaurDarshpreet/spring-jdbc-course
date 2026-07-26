@@ -206,7 +206,9 @@ Go to the **Actions** tab on GitHub. You should see two jobs run in sequence:
 ---
 
 ### Step 7 — Verify the deployment
-Once the pipeline is green, open `http://YOUR-VM-IP:8080` in a browser.
+Once the pipeline is green, from your Windows VM open `http://YOURLINUXPRIVATEIP:8081` in a
+browser (the same private IP and port pattern used in Module 08 — port 8081 because Jenkins
+on the Linux VM already occupies 8080, and only 8081 is open in the security group).
 
 You should see the Stock Tracker frontend loading data from the API.
 
@@ -235,7 +237,7 @@ the new stock should appear without any manual steps on the server.
 - A push to `main` triggers both jobs automatically
 - The `deploy` job only runs if `build-and-push` succeeds
 - The Docker image appears in your GitHub Packages
-- `http://YOUR-VM-IP:8080` serves the stock tracker frontend
+- `http://YOURLINUXPRIVATEIP:8081` serves the stock tracker frontend
 - A code change pushed to `main` is live on the server after the pipeline completes
 - MySQL data persists across deployments (the `mysql-data` volume is not removed)
 
