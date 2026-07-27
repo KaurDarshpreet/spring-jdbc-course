@@ -10,32 +10,46 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-/**
- * InMemoryStockRepository stores stocks in a Map.
- *
- * @Repository marks this as a Spring-managed data access bean.
- * Spring will create one instance of this class and inject it wherever
- * a StockRepository is required.
- *
- * TODO: Implement the StockRepository interface.
- *       Step 1: Add "implements StockRepository" to the class declaration.
- *       Step 2: Implement each method of the interface.
- *               Use the AtomicLong idSequence for ID generation
- *               and the ConcurrentHashMap store for storage.
- *       Step 3: For save(), if stock.getId() is null, create a new Stock
- *               with the next sequence ID and store that. Return the stored instance.
- */
+/** * InMemoryStockRepository stores stocks in a Map. */
 @Repository
-public class InMemoryStockRepository {   // TODO: add "implements StockRepository"
+public class InMemoryStockRepository implements StockRepository {
 
     private final AtomicLong idSequence = new AtomicLong(1);
     private final Map<Long, Stock> store = new ConcurrentHashMap<>();
 
-    // TODO: implement findAll()
+    @Override
+    public List<Stock> findAll() {
+        return new ArrayList<>(store.values());
+    }
 
-    // TODO: implement findById(Long id)
+    @Override
+    public Optional<Stock> findById(Long id) {
+        return Optional.ofNullable(store.get(id));
+    }
 
-    // TODO: implement findBySymbol(String symbol)
+    @Override
+    public Optional<Stock> findBySymbol(String symbol) {
+        if (symbol == null) {
+            return Optional.empty();
+        }
+        return store.values().stream()
+                .filter(stock -> stock.symbol() != null && stock.symbol().equalsIgnoreCase(symbol))
+                .findFirst();
+    }
 
-    // TODO: implement save(Stock stock)
+    @Override
+    public Stock save(Stock stock) {
+        Stock toStore = stock;
+
+        if (stock.id() == null) {
+            long nextId = idSequence.getAndIncrement();
+            // Adjust constructor args if your Stock record/class has more fields.
+            toStore = new Stock(nextId, stock.symbol());
+        }
+
+        store.put(toStore.id(), toStore);
+        return toStore;
+    }
 }
+
+    
